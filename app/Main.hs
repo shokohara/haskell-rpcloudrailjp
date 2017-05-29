@@ -10,4 +10,5 @@ import           Servant
 import           Servant.API
 
 main :: IO ()
-main = App.run ":memory:"
+main = App.run
+

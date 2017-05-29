@@ -17,28 +17,11 @@ import Network.Wai.Handler.Warp
 import Network.Wai.Logger (withStdoutLogger)
 import Servant
 import System.Environment
+import Servant.Mock
+import Network.HTTP
 
-api :: Proxy API
-api = Proxy
+run :: IO ()
+run = do
+  rsp <- simpleHTTP (getRequest "http://www.haskell.org/")
+  fmap (take 100) (getResponseBody rsp) >>= putStrLn
 
-app :: ConnectionPool -> Application
-app p = serve api $ server p
-
-makeApp :: Text -> IO Application
-makeApp s = do
-  host <- fromMaybe "127.0.0.1" <$> lookupEnv "MYSQL_HOST"
-  poolSize <- maybe 10 read <$> lookupEnv "MYSQL_POOLSIZE" -- Here may throw exception from read function. This is intentional decision in software design.
-  database <- fromMaybe "rbac" <$> lookupEnv "MYSQL_DATABASE"
-  user <- fromMaybe "root" <$> lookupEnv "MYSQL_USER"
-  password <- fromMaybe "" <$> lookupEnv "MYSQL_PASSWORD"
-  pool <- runStdoutLoggingT $ createMySQLPool defaultConnectInfo { connectHost = host, connectDatabase = database, connectUser = user, connectPassword = password } poolSize
-  runSqlPool (runMigrationUnsafe migrateAll) pool
-  return $ app pool
-
-makeTestApp :: Text -> IO Application
-makeTestApp = makeApp
-
-run :: Text -> IO ()
-run s = withStdoutLogger $ \aplogger -> do
-  let settings = setPort 3000 $ setLogger aplogger defaultSettings
-  runSettings settings =<< makeApp s
