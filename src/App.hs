@@ -2,7 +2,6 @@
 
 module App where
 
-import Api
 import Control.Exception
 import Control.Monad.IO.Class
 import Control.Monad.Logger (runStdoutLoggingT)
@@ -11,7 +10,6 @@ import Data.Foldable
 import Data.Maybe
 import Data.Text (Text)
 import Database.Persist.MySQL
-import Model
 import Network.Wai
 import Network.Wai.Handler.Warp
 import Network.Wai.Logger (withStdoutLogger)
