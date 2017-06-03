@@ -17,19 +17,18 @@ library:
   - aeson
   - aeson-casing
   - servant-server
-  - wai
-  - warp
   - text
   - monad-logger
-  - persistent
-  - persistent-template
-  - persistent-mysql
-  - mtl
-  - HTTP
   - transformers
   - wai-logger
+  - HsOpenSSL
   - time ==1.6.0.1
-  - servant-mock
+  - wreq
+  - http-client
+  - http-client-tls
+  - lens
+  - lens-aeson
+  - http-client-openssl
   - HDBC
   - HTTP
 executables:
